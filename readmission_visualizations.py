@@ -681,19 +681,20 @@ def create_risk_stratification_visualization():
     plt.close()
     
     # Create a clinical intervention recommendation table
-    # Create a figure with appropriate dimensions
-    plt.figure(figsize=(12, 10))
+    
+    # Create a figure with appropriate width-to-height ratio for horizontal layout
+    plt.figure(figsize=(12, 6))
     
     # Table data
     risk_band = ['Very Low (0-5%)', 'Low (5-10%)', 'Moderate (10-30%)', 'High (30-60%)', 'Very High (>60%)']
     
-    # Separate interventions with clear line breaks and better spacing
+    # More concise interventions to prevent overlap
     interventions = [
         'Standard discharge instructions\nRegular follow-up appointment',
         'Phone follow-up within 14 days\nMedication reconciliation',
-        'Follow-up appointment within 7 days\nHome health assessment\nEnhanced medication review',
-        'Follow-up within 48-72 hours\nTelehealth monitoring\nCare coordinator assignment\nMedication delivery service',
-        'Intensive care transition program\nSpecialty follow-up within 48 hours\nRemote monitoring\nHome health visits\nSocial work consult'
+        'Follow-up within 7 days\nHome health assessment\nMedication review',
+        'Follow-up within 48 hours\nTelehealth monitoring\nCare coordination',
+        'Intensive transition program\nSpecialty follow-up\nHome health visits'
     ]
     
     # Color scheme for risk levels
@@ -704,7 +705,7 @@ def create_risk_stratification_visualization():
     for i in range(len(risk_band)):
         table_data.append([risk_band[i], interventions[i]])
     
-    # Create table with more height for cells with more text
+    # Create table with horizontal orientation
     table = plt.table(
         cellText=table_data, 
         colLabels=['Risk Category', 'Recommended Interventions'],
@@ -716,25 +717,22 @@ def create_risk_stratification_visualization():
     
     # Customize table appearance
     table.auto_set_font_size(False)
-    table.set_fontsize(12)
+    table.set_fontsize(10)
     
-    # Scale with different height for each row based on content
-    row_heights = [2.0, 2.0, 2.5, 3.0, 3.5]  # Increase height for rows with more text
+    # Adjust cell heights - give more space to rows with more text
+    row_heights = [1.6, 1.6, 2.0, 2.0, 2.0]
     for i, height in enumerate(row_heights):
-        for j in range(2):  # Two columns
-            cell = table[(i+1, j)]  # +1 because row 0 is the header
+        for j in range(2):
+            cell = table[(i+1, j)]
             cell.set_height(height)
     
-    # Scale the entire table
-    table.scale(1, 1.2)
-    
+    # No additional scaling needed
     plt.axis('off')
-    plt.title('Risk-Stratified Intervention Recommendations', fontsize=20, pad=20)
+    plt.title('Risk-Stratified Intervention Recommendations', fontsize=16)
     
     plt.tight_layout()
     plt.savefig('visualizations/improved_intervention_recommendations.png', dpi=300, bbox_inches='tight')
     plt.close()
-
 
 # Run all visualization functions
 if __name__ == "__main__":
