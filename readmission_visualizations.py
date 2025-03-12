@@ -680,58 +680,55 @@ def create_risk_stratification_visualization():
     plt.savefig('visualizations/risk_stratification.png', dpi=300, bbox_inches='tight')
     plt.close()
     
-    # Create a clinical intervention recommendation table
+    # Create a figure with wide horizontal orientation
+    plt.figure(figsize=(14, 8))
     
-    # Create a figure with appropriate width-to-height ratio for horizontal layout
-    plt.figure(figsize=(12, 6))
+    # Risk categories and interventions
+    risk_categories = ['Very Low (0-5%)', 'Low (5-10%)', 'Moderate (10-30%)', 'High (30-60%)', 'Very High (>60%)']
     
-    # Table data
-    risk_band = ['Very Low (0-5%)', 'Low (5-10%)', 'Moderate (10-30%)', 'High (30-60%)', 'Very High (>60%)']
-    
-    # More concise interventions to prevent overlap
-    interventions = [
-        'Standard discharge instructions\nRegular follow-up appointment',
-        'Phone follow-up within 14 days\nMedication reconciliation',
-        'Follow-up within 7 days\nHome health assessment\nMedication review',
-        'Follow-up within 48 hours\nTelehealth monitoring\nCare coordination',
-        'Intensive transition program\nSpecialty follow-up\nHome health visits'
-    ]
-    
-    # Color scheme for risk levels
+    # Color scheme
     colors = ['#2ecc71', '#3498db', '#f39c12', '#e74c3c', '#8e44ad']
     
-    # Draw the table
-    table_data = []
-    for i in range(len(risk_band)):
-        table_data.append([risk_band[i], interventions[i]])
+    # Interventions per category - keep these concise
+    interventions = [
+        'Standard discharge instructions\nRegular follow-up',
+        'Phone follow-up within 14 days\nMedication reconciliation',
+        'Follow-up within 7 days\nHome assessment\nMedication review',
+        'Follow-up within 48hrs\nTelehealth monitoring\nCare coordination',
+        'Intensive transition program\nSpecialty follow-up\nHome services'
+    ]
     
-    # Create table with horizontal orientation
-    table = plt.table(
-        cellText=table_data, 
-        colLabels=['Risk Category', 'Recommended Interventions'],
-        cellLoc='center', 
+    # Create a horizontal table structure
+    # First row: Risk Category header
+    header_table = plt.table(
+        cellText=[['Risk Category'] + risk_categories],
+        cellLoc='center',
         loc='center',
-        cellColours=[[colors[i], '#f8f9fa'] for i in range(len(risk_band))],
-        colWidths=[0.3, 0.7]
+        colWidths=[0.2] + [0.16] * 5,
+        cellColours=[['#f0f0f0'] + colors],
     )
+    header_table.auto_set_font_size(False)
+    header_table.set_fontsize(10)
+    header_table.scale(1, 1.5)
     
-    # Customize table appearance
-    table.auto_set_font_size(False)
-    table.set_fontsize(10)
+    # Second row: Interventions
+    # Position it below the header
+    intervention_table = plt.table(
+        cellText=[['Recommended\nInterventions'] + interventions],
+        cellLoc='center',
+        loc='center',
+        bbox=[0, 0.4, 1, 0.4],  # Position below the header
+        colWidths=[0.2] + [0.16] * 5,
+        cellColours=[['#f0f0f0'] + ['#f8f9fa'] * 5],
+    )
+    intervention_table.auto_set_font_size(False)
+    intervention_table.set_fontsize(9)
+    intervention_table.scale(1, 3.0)  # Make intervention cells taller
     
-    # Adjust cell heights - give more space to rows with more text
-    row_heights = [1.6, 1.6, 2.0, 2.0, 2.0]
-    for i, height in enumerate(row_heights):
-        for j in range(2):
-            cell = table[(i+1, j)]
-            cell.set_height(height)
-    
-    # No additional scaling needed
     plt.axis('off')
-    plt.title('Risk-Stratified Intervention Recommendations', fontsize=16)
-    
+    plt.title('Risk-Stratified Intervention Recommendations', fontsize=16, pad=20)
     plt.tight_layout()
-    plt.savefig('visualizations/improved_intervention_recommendations.png', dpi=300, bbox_inches='tight')
+    plt.savefig('visualizations/horizontal_intervention_recommendations.png', dpi=300, bbox_inches='tight')
     plt.close()
 
 # Run all visualization functions
